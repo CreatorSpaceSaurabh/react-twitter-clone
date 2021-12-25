@@ -23,4 +23,5 @@ export default NextAuth({
     },
   },
   secret: process.env.JWT_SECRET,
+  // JWT_SECRET
 });
