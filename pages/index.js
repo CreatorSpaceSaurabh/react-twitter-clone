@@ -34,6 +34,7 @@ export default function Home({ trendingResults, followResults, providers }) {
 }
 
 export async function getServerSideProps(context) {
+  let props = {};
   const trendingResults = await fetch("https://jsonkeeper.com/b/NKEV", {
     method: "GET",
     headers: {
@@ -42,7 +43,12 @@ export async function getServerSideProps(context) {
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
       Accept: "application/json; charset=UTF-8",
     },
-  }).then((res) => res.json());
+  })
+    .then((res) => {
+      console.log(res);
+      return res.json();
+    })
+    .then((json) => (props["trendingResults"] = json));
   const followResults = await fetch("https://jsonkeeper.com/b/WWMJ", {
     method: "GET",
     headers: {
@@ -51,16 +57,26 @@ export async function getServerSideProps(context) {
         "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
       Accept: "application/json; charset=UTF-8",
     },
-  }).then((res) => res.json());
-  const providers = await getProviders();
-  const session = await getSession(context);
+  })
+    .then((res) => {
+      console.log(res);
+      return res.json();
+    })
+    .then((json) => (props["followResults"] = json));
+  const providers = await getProviders().then(
+    (json) => (props["providers"] = json)
+  );
+  const session = await getSession(context).then(
+    (json) => (props["session"] = json)
+  );
 
   return {
-    props: {
-      trendingResults,
-      followResults,
-      providers,
-      session,
-    },
+    // props: {
+    //   trendingResults,
+    //   followResults,
+    //   providers,
+    //   session,
+    // },
+    props,
   };
 }
