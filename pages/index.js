@@ -34,12 +34,24 @@ export default function Home({ trendingResults, followResults, providers }) {
 }
 
 export async function getServerSideProps(context) {
-  const trendingResults = await fetch("https://jsonkeeper.com/b/NKEV").then(
-    (res) => res.json()
-  );
-  const followResults = await fetch("https://jsonkeeper.com/b/WWMJ").then(
-    (res) => res.json()
-  );
+  const trendingResults = await fetch("https://jsonkeeper.com/b/NKEV", {
+    method: "GET",
+    headers: {
+      // update with your user-agent
+      "User-Agent":
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
+      Accept: "application/json; charset=UTF-8",
+    },
+  }).then((res) => res.json());
+  const followResults = await fetch("https://jsonkeeper.com/b/WWMJ", {
+    method: "GET",
+    headers: {
+      // update with your user-agent
+      "User-Agent":
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
+      Accept: "application/json; charset=UTF-8",
+    },
+  }).then((res) => res.json());
   const providers = await getProviders();
   const session = await getSession(context);
 
